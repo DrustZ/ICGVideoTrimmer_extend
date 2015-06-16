@@ -95,6 +95,19 @@
     return _pointerColor ?: [UIColor whiteColor];
 }
 
+- (UIView*)playbackPointerView
+{
+    if (!_playbackPointerView) {
+        CGRect pointerRect = CGRectMake(0, 0, self.pointerWidth, CGRectGetMaxY(self.frameView.bounds));
+        _playbackPointerView = [[UIView alloc] initWithFrame: pointerRect];
+        _playbackPointerView.backgroundColor = self.pointerColor;
+        _playbackPointerView.layer.cornerRadius = 3;
+        _playbackPointerView.clipsToBounds = YES;
+        _playbackPointerView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    }
+    return _playbackPointerView;
+}
+
 - (void)resetSubviews
 {
     [self setBackgroundColor:[UIColor blackColor]];
@@ -400,19 +413,6 @@
 @end
 
 @implementation ICGVideoTrimmerView (ICGPlaybackTime)
-
-- (UIView*)playbackPointerView
-{
-    if (!_playbackPointerView) {
-        CGRect pointerRect = CGRectMake(0, 0, self.pointerWidth, CGRectGetMaxY(self.frameView.bounds));
-        _playbackPointerView = [[UIView alloc] initWithFrame: pointerRect];
-        _playbackPointerView.backgroundColor = self.pointerColor;
-        _playbackPointerView.layer.cornerRadius = 3;
-        _playbackPointerView.clipsToBounds = YES;
-        _playbackPointerView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    }
-    return _playbackPointerView;
-}
 
 - (void)movePlaybackPointerAtTime:(NSTimeInterval)timeInterval
 {
