@@ -10,7 +10,7 @@
 #import "ICGThumbView.h"
 #import "ICGRulerView.h"
 
-@interface ICGVideoTrimmerView() <UIScrollViewDelegate>
+@interface ICGVideoTrimmerView() <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIView *frameView;
@@ -25,6 +25,8 @@
 @property (strong, nonatomic) UIView *topBorder;
 @property (strong, nonatomic) UIView *bottomBorder;
 
+@property (strong, nonatomic) UIView* playbackPointerView;
+
 @property (nonatomic) CGFloat startTime;
 @property (nonatomic) CGFloat endTime;
 
@@ -37,6 +39,11 @@
 @end
 
 @implementation ICGVideoTrimmerView
+
+- (void)dealloc
+{
+    self.scrollView.delegate = nil;
+}
 
 #pragma mark - Initiation
 
@@ -73,6 +80,21 @@
     return _minLength ?: 3;
 }
 
+- (CGFloat)pointerWidth
+{
+    return _pointerWidth ?: 5;
+}
+
+- (UIColor *)borderColor
+{
+    return _borderColor ?: self.themeColor;
+}
+
+-(UIColor *)pointerColor
+{
+    return _pointerColor ?: [UIColor whiteColor];
+}
+
 - (void)resetSubviews
 {
     [self setBackgroundColor:[UIColor blackColor]];
@@ -83,6 +105,9 @@
     [self addSubview:self.scrollView];
     [self.scrollView setDelegate:self];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
+    
+    UITapGestureRecognizer* movePointerGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(movePointer:)];
+    [self.scrollView addGestureRecognizer: movePointerGesture];
     
     self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.scrollView.frame), CGRectGetHeight(self.scrollView.frame))];
     [self.scrollView setContentSize:self.contentView.frame.size];
@@ -103,28 +128,29 @@
     
     // add borders
     self.topBorder = [[UIView alloc] init];
-    [self.topBorder setBackgroundColor:self.themeColor];
+    [self.topBorder setBackgroundColor:self.borderColor];
     [self addSubview:self.topBorder];
     
     self.bottomBorder = [[UIView alloc] init];
-    [self.bottomBorder setBackgroundColor:self.themeColor];
+    [self.bottomBorder setBackgroundColor:self.borderColor];
     [self addSubview:self.bottomBorder];
     
     // width for left and right overlay views
     self.overlayWidth =  CGRectGetWidth(self.frame) - (self.minLength * self.widthPerSecond);
-
+    
     // add left overlay view
     self.leftOverlayView = [[UIView alloc] initWithFrame:CGRectMake(self.thumbWidth - self.overlayWidth, 0, self.overlayWidth, CGRectGetHeight(self.frameView.frame))];
     CGRect leftThumbFrame = CGRectMake(self.overlayWidth-self.thumbWidth, 0, self.thumbWidth, CGRectGetHeight(self.frameView.frame));
     if (self.leftThumbImage) {
         self.leftThumbView = [[ICGThumbView alloc] initWithFrame:leftThumbFrame thumbImage:self.leftThumbImage];
     } else {
-        self.leftThumbView = [[ICGThumbView alloc] initWithFrame:leftThumbFrame color:self.themeColor right:NO];
+        self.leftThumbView = [[ICGThumbView alloc] initWithFrame:leftThumbFrame color:self.borderColor right:NO];
     }
     [self.leftThumbView.layer setMasksToBounds:YES];
     [self.leftOverlayView addSubview:self.leftThumbView];
     [self.leftOverlayView setUserInteractionEnabled:YES];
     UIPanGestureRecognizer *leftPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveLeftOverlayView:)];
+    leftPanGestureRecognizer.delegate = self;
     [self.leftOverlayView addGestureRecognizer:leftPanGestureRecognizer];
     [self.leftOverlayView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
     [self addSubview:self.leftOverlayView];
@@ -135,12 +161,13 @@
     if (self.rightThumbImage) {
         self.rightThumbView = [[ICGThumbView alloc] initWithFrame:CGRectMake(0, 0, self.thumbWidth, CGRectGetHeight(self.frameView.frame)) thumbImage:self.rightThumbImage];
     } else {
-        self.rightThumbView = [[ICGThumbView alloc] initWithFrame:CGRectMake(0, 0, self.thumbWidth, CGRectGetHeight(self.frameView.frame)) color:self.themeColor right:YES];
+        self.rightThumbView = [[ICGThumbView alloc] initWithFrame:CGRectMake(0, 0, self.thumbWidth, CGRectGetHeight(self.frameView.frame)) color:self.borderColor right:YES];
     }
     [self.rightThumbView.layer setMasksToBounds:YES];
     [self.rightOverlayView addSubview:self.rightThumbView];
     [self.rightOverlayView setUserInteractionEnabled:YES];
     UIPanGestureRecognizer *rightPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveRightOverlayView:)];
+    rightPanGestureRecognizer.delegate = self;
     [self.rightOverlayView addGestureRecognizer:rightPanGestureRecognizer];
     [self.rightOverlayView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
     [self addSubview:self.rightOverlayView];
@@ -227,6 +254,15 @@
             
         default:
             break;
+    }
+}
+
+- (void)movePointer:(UITapGestureRecognizer *)gesture
+{
+    CGPoint pointerPoint = [gesture locationInView:self.scrollView];
+    if ([self.delegate respondsToSelector:@selector(trimmerView:didMovePointerAtTime:)]) {
+        [self.delegate trimmerView: self
+              didMovePointerAtTime: CMTimeGetSeconds(self.asset.duration) * pointerPoint.x / (self.scrollView.contentSize.width - self.pointerWidth)];
     }
 }
 
@@ -352,6 +388,61 @@
         }];
     }
     [self notifyDelegate];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+@end
+
+@implementation ICGVideoTrimmerView (ICGPlaybackTime)
+
+- (UIView*)playbackPointerView
+{
+    if (!_playbackPointerView) {
+        CGRect pointerRect = CGRectMake(0, 0, self.pointerWidth, CGRectGetMaxY(self.frameView.bounds));
+        _playbackPointerView = [[UIView alloc] initWithFrame: pointerRect];
+        _playbackPointerView.backgroundColor = self.pointerColor;
+        _playbackPointerView.layer.cornerRadius = 3;
+        _playbackPointerView.clipsToBounds = YES;
+        _playbackPointerView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    }
+    return _playbackPointerView;
+}
+
+- (void)movePlaybackPointerAtTime:(NSTimeInterval)timeInterval
+{
+    [self.scrollView addSubview: self.playbackPointerView];
+    [self.scrollView bringSubviewToFront: self.playbackPointerView];
+    CGRect pointerRect = self.playbackPointerView.frame;
+    NSTimeInterval durationInSeconds = CMTimeGetSeconds(self.asset.duration);
+    pointerRect.origin.x = (self.scrollView.contentSize.width - self.pointerWidth) * timeInterval / durationInSeconds;
+    self.playbackPointerView.frame = pointerRect;
+}
+
+- (void)runPlaybackPointerAtTime:(NSTimeInterval)timeInterval
+{
+    [self.playbackPointerView.layer removeAllAnimations];
+    
+    [self movePlaybackPointerAtTime: timeInterval];
+    
+    NSTimeInterval durationInSeconds = CMTimeGetSeconds(self.asset.duration);
+    [UIView animateWithDuration:durationInSeconds - timeInterval
+                          delay:0
+                        options:UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self movePlaybackPointerAtTime: durationInSeconds];
+                     } completion:nil];
+}
+
+- (void)stopPlaybackPointerAtTime:(NSTimeInterval)timeInterval
+{
+    [self.playbackPointerView.layer removeAllAnimations];
+    [self movePlaybackPointerAtTime: timeInterval];
 }
 
 @end

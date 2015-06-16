@@ -19,6 +19,12 @@
 // Theme color for the trimmer view
 @property (strong, nonatomic) UIColor *themeColor;
 
+// Theme color for the borders
+@property (strong, nonatomic) UIColor *borderColor;
+
+// Theme color for the playback pointer
+@property (strong, nonatomic) UIColor *pointerColor;
+
 // Maximum length for the trimmed video
 @property (assign, nonatomic) CGFloat maxLength;
 
@@ -40,6 +46,9 @@
 // Custom width for thumb
 @property (assign, nonatomic) CGFloat thumbWidth;
 
+// Custom width for playback pointer
+@property (assign, nonatomic) CGFloat pointerWidth;
+
 @property (weak, nonatomic) IBOutlet id<ICGVideoTrimmerDelegate> delegate;
 
 - (instancetype)initWithAsset:(AVAsset *)asset;
@@ -50,8 +59,19 @@
 
 @end
 
+@interface ICGVideoTrimmerView (ICGPlaybackTime)
+
+- (void)runPlaybackPointerAtTime:(NSTimeInterval)timeInterval;
+- (void)stopPlaybackPointerAtTime:(NSTimeInterval)timeInterval;
+
+@end
+
 @protocol ICGVideoTrimmerDelegate <NSObject>
 
 - (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didChangeLeftPosition:(CGFloat)startTime rightPosition:(CGFloat)endTime;
+
+
+@optional
+- (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didMovePointerAtTime:(NSTimeInterval)time;
 
 @end
