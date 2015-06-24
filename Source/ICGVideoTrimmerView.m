@@ -95,19 +95,6 @@
     return _pointerColor ?: [UIColor whiteColor];
 }
 
-- (UIView*)playbackPointerView
-{
-    if (!_playbackPointerView) {
-        CGRect pointerRect = CGRectMake(0, 0, self.pointerWidth, CGRectGetMaxY(self.frameView.bounds));
-        _playbackPointerView = [[UIView alloc] initWithFrame: pointerRect];
-        _playbackPointerView.backgroundColor = self.pointerColor;
-        _playbackPointerView.layer.cornerRadius = 3;
-        _playbackPointerView.clipsToBounds = YES;
-        _playbackPointerView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    }
-    return _playbackPointerView;
-}
-
 - (void)resetSubviews
 {
     [self setBackgroundColor:[UIColor blackColor]];
@@ -169,7 +156,7 @@
     [self addSubview:self.leftOverlayView];
     
     // add right overlay view
-    CGFloat rightViewFrameX = CGRectGetWidth(self.frameView.frame) < CGRectGetWidth(self.frame) ? CGRectGetMaxX(self.frameView.frame) : CGRectGetWidth(self.frame) - self.thumbWidth;
+    CGFloat rightViewFrameX = CGRectGetMaxX(self.frameView.frame) < CGRectGetWidth(self.frame) ? CGRectGetMaxX(self.frameView.frame) : CGRectGetWidth(self.frame) - self.thumbWidth;
     self.rightOverlayView = [[UIView alloc] initWithFrame:CGRectMake(rightViewFrameX, 0, self.overlayWidth, CGRectGetHeight(self.frameView.frame))];
     if (self.rightThumbImage) {
         self.rightThumbView = [[ICGThumbView alloc] initWithFrame:CGRectMake(0, 0, self.thumbWidth, CGRectGetHeight(self.frameView.frame)) thumbImage:self.rightThumbImage];
@@ -325,8 +312,8 @@
     
     CGFloat frameViewFrameWidth = (duration / self.maxLength) * screenWidth;
     [self.frameView setFrame:CGRectMake(self.thumbWidth, 0, frameViewFrameWidth, CGRectGetHeight(self.frameView.frame))];
-    CGFloat contentViewFrameWidth = CMTimeGetSeconds([self.asset duration]) <= self.maxLength + 0.5 ? screenWidth + 30 : frameViewFrameWidth;
-    [self.contentView setFrame:CGRectMake(0, 0, contentViewFrameWidth, CGRectGetHeight(self.contentView.frame))];
+    CGFloat contentViewFrameWidth = CMTimeGetSeconds([self.asset duration]) <= self.maxLength + 0.5 ? screenWidth : frameViewFrameWidth;
+    [self.contentView setFrame:CGRectMake(0, 0, contentViewFrameWidth + 2 * self.thumbWidth, CGRectGetHeight(self.contentView.frame))];
     [self.scrollView setContentSize:self.contentView.frame.size];
     NSInteger minFramesNeeded = screenWidth / picWidth + 1;
     actualFramesNeeded =  (duration / self.maxLength) * minFramesNeeded + 1;
@@ -413,6 +400,19 @@
 @end
 
 @implementation ICGVideoTrimmerView (ICGPlaybackTime)
+
+- (UIView*)playbackPointerView
+{
+    if (!_playbackPointerView) {
+        CGRect pointerRect = CGRectMake(0, 0, self.pointerWidth, CGRectGetMaxY(self.frameView.bounds));
+        _playbackPointerView = [[UIView alloc] initWithFrame: pointerRect];
+        _playbackPointerView.backgroundColor = self.pointerColor;
+        _playbackPointerView.layer.cornerRadius = 3;
+        _playbackPointerView.clipsToBounds = YES;
+        _playbackPointerView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    }
+    return _playbackPointerView;
+}
 
 - (void)movePlaybackPointerAtTime:(NSTimeInterval)timeInterval
 {
