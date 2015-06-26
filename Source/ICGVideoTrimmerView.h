@@ -68,10 +68,13 @@
 
 @protocol ICGVideoTrimmerDelegate <NSObject>
 
-- (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didChangeLeftPosition:(CGFloat)startTime rightPosition:(CGFloat)endTime;
+- (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didChangeLeftPosition:(NSTimeInterval)startTime rightPosition:(NSTimeInterval)endTime;
 
 
 @optional
 - (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didMovePointerAtTime:(NSTimeInterval)time;
+
+@optional
+- (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didStopAnyMoveAtLeftPosition:(NSTimeInterval)startTime rightPosition:(NSTimeInterval)endTime;
 
 @end

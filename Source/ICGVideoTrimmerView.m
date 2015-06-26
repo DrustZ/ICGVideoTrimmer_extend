@@ -27,8 +27,8 @@
 
 @property (strong, nonatomic) UIView* playbackPointerView;
 
-@property (nonatomic) CGFloat startTime;
-@property (nonatomic) CGFloat endTime;
+@property (nonatomic) NSTimeInterval startTime;
+@property (nonatomic) NSTimeInterval endTime;
 
 @property (nonatomic) CGFloat widthPerSecond;
 
@@ -213,7 +213,11 @@
             
             break;
         }
-            
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+            [self didStopMove];
+            break;
         default:
             break;
     }
@@ -251,7 +255,11 @@
             
             break;
         }
-            
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+            [self didStopMove];
+            break;
         default:
             break;
     }
@@ -261,8 +269,8 @@
 {
     CGPoint pointerPoint = [gesture locationInView:self.scrollView];
     if ([self.delegate respondsToSelector:@selector(trimmerView:didMovePointerAtTime:)]) {
-        [self.delegate trimmerView: self
-              didMovePointerAtTime: CMTimeGetSeconds(self.asset.duration) * pointerPoint.x / (self.scrollView.contentSize.width - self.pointerWidth)];
+        [self.delegate trimmerView:self
+              didMovePointerAtTime:CMTimeGetSeconds(self.asset.duration) * pointerPoint.x / (self.scrollView.contentSize.width - self.pointerWidth)];
     }
 }
 
@@ -271,6 +279,15 @@
     self.startTime = CGRectGetMaxX(self.leftOverlayView.frame) / self.widthPerSecond + (self.scrollView.contentOffset.x -self.thumbWidth) / self.widthPerSecond;
     self.endTime = CGRectGetMinX(self.rightOverlayView.frame) / self.widthPerSecond + (self.scrollView.contentOffset.x - self.thumbWidth) / self.widthPerSecond;
     [self.delegate trimmerView:self didChangeLeftPosition:self.startTime rightPosition:self.endTime];
+}
+
+- (void)didStopMove
+{
+    if ([self.delegate respondsToSelector:@selector(trimmerView:didStopAnyMoveAtLeftPosition:rightPosition:)]) {
+        [self.delegate trimmerView:self
+      didStopAnyMoveAtLeftPosition:self.startTime
+                     rightPosition:self.endTime];
+   }
 }
 
 - (void)addFrames
@@ -388,6 +405,23 @@
         }];
     }
     [self notifyDelegate];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self didStopMove];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (decelerate == 0) {
+        [self didStopMove];
+    }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    [self didStopMove];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
