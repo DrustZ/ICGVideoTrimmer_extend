@@ -10,7 +10,7 @@
 #import "ICGThumbView.h"
 #import "ICGRulerView.h"
 
-@interface ICGVideoTrimmerView() <UIScrollViewDelegate, UIGestureRecognizerDelegate>
+@interface ICGVideoTrimmerView() <UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIView *frameView;
@@ -150,7 +150,6 @@
     [self.leftOverlayView addSubview:self.leftThumbView];
     [self.leftOverlayView setUserInteractionEnabled:YES];
     UIPanGestureRecognizer *leftPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveLeftOverlayView:)];
-    leftPanGestureRecognizer.delegate = self;
     [self.leftOverlayView addGestureRecognizer:leftPanGestureRecognizer];
     [self.leftOverlayView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
     [self addSubview:self.leftOverlayView];
@@ -167,7 +166,6 @@
     [self.rightOverlayView addSubview:self.rightThumbView];
     [self.rightOverlayView setUserInteractionEnabled:YES];
     UIPanGestureRecognizer *rightPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveRightOverlayView:)];
-    rightPanGestureRecognizer.delegate = self;
     [self.rightOverlayView addGestureRecognizer:rightPanGestureRecognizer];
     [self.rightOverlayView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
     [self addSubview:self.rightOverlayView];
@@ -424,13 +422,6 @@
     [self didStopMove];
 }
 
-#pragma mark - UIGestureRecognizerDelegate
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
-}
-
 @end
 
 @implementation ICGVideoTrimmerView (ICGPlaybackTime)
@@ -438,7 +429,7 @@
 - (UIView*)playbackPointerView
 {
     if (!_playbackPointerView) {
-        CGRect pointerRect = CGRectMake(0, 0, self.pointerWidth, CGRectGetMaxY(self.frameView.bounds));
+        CGRect pointerRect = CGRectMake(self.thumbWidth - self.pointerWidth / 2, 0, self.pointerWidth, CGRectGetMaxY(self.frameView.bounds));
         _playbackPointerView = [[UIView alloc] initWithFrame: pointerRect];
         _playbackPointerView.backgroundColor = self.pointerColor;
         _playbackPointerView.layer.cornerRadius = 3;
@@ -454,7 +445,7 @@
     [self.scrollView bringSubviewToFront: self.playbackPointerView];
     CGRect pointerRect = self.playbackPointerView.frame;
     NSTimeInterval durationInSeconds = CMTimeGetSeconds(self.asset.duration);
-    pointerRect.origin.x = (self.scrollView.contentSize.width - self.pointerWidth) * timeInterval / durationInSeconds;
+    pointerRect.origin.x = self.thumbWidth - self.pointerWidth / 2 + (self.scrollView.contentSize.width - 2 * self.thumbWidth) * timeInterval / durationInSeconds;
     self.playbackPointerView.frame = pointerRect;
 }
 

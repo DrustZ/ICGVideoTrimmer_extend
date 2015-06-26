@@ -49,6 +49,12 @@
 // Custom width for playback pointer
 @property (assign, nonatomic) CGFloat pointerWidth;
 
+// Left trimmer position
+@property (readonly, nonatomic) NSTimeInterval startTime;
+
+// Right trimmer position
+@property (readonly, nonatomic) NSTimeInterval endTime;
+
 @property (weak, nonatomic) IBOutlet id<ICGVideoTrimmerDelegate> delegate;
 
 - (instancetype)initWithAsset:(AVAsset *)asset;
