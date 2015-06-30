@@ -10,6 +10,8 @@
 #import "ICGThumbView.h"
 #import "ICGRulerView.h"
 
+#import <AVFoundation/AVFoundation.h>
+
 @interface ICGVideoTrimmerView() <UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIView *contentView;

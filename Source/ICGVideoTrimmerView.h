@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AVFoundation/AVFoundation.h>
 
 @protocol ICGVideoTrimmerDelegate;
+@class AVAsset;
 
 @interface ICGVideoTrimmerView : UIView
 

@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>6887C9FC-AE1A-4A85-A407-1C91888561A6</string>
 	<key>IDESourceControlProjectName</key>
-	<string>ICGVideoTrimmer</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>015E49049ED0AE438F53D0763539318ECCB7757C</key>
 		<string>https://github.com/Igor-Palaguta/ICGVideoTrimmer.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>ICGVideoTrimmer.xcodeproj</string>
+	<string>ICGVideoTrimmer.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>015E49049ED0AE438F53D0763539318ECCB7757C</key>
