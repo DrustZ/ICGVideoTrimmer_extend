@@ -93,9 +93,10 @@
     CGSize theNaturalSize = ([[asset tracksWithMediaType:AVMediaTypeVideo][0] naturalSize]);
     self.movieAspectRatio = theNaturalSize.width/theNaturalSize.height;
     [self.videoview setWidth:self.width];
+    [self.videoview setBackgroundColor:[UIColor whiteColor]];
+
     if (self.orientation == LBVideoOrientationLeft || self.orientation == LBVideoOrientationRight){
         self.videoview.frame = CGRectMake(0, 0, self.height*self.movieAspectRatio, self.height);
-        [self.videoview setBackgroundColor:[UIColor whiteColor]];
     }
     self.videoview.center = self.center;
 
@@ -106,11 +107,12 @@
         self.xrate = (0 - self.videoview.left) / self.videoview.width;
     } else {
         self.xrate = -1;
+        [self.playerLayer setBackgroundColor:[[UIColor grayColor] CGColor]];
     }
+
     [self.playerLayer setFrame:self.videoview.bounds];
-    [self.playerLayer setBounds:self.videoview.bounds];
+    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [self.videoview.layer addSublayer:self.playerLayer];
-    self.playerLayer.contentsGravity = kCAGravityResizeAspectFill;
     [self addSubview:self.videoview];
     
     

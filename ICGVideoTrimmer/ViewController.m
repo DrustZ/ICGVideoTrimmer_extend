@@ -121,6 +121,10 @@
 
 - (AVAssetExportSession*)applyCropToVideoWithAsset:(AVAsset*)asset AtRect:(CGRect)cropRect OnTimeRange:(CMTimeRange)cropTimeRange ExportToUrl:(NSURL*)outputUrl ExistingExportSession:(AVAssetExportSession*)exporter WithCompletion:(void(^)(BOOL success, NSError* error, NSURL* videoUrl))completion needCrop:(BOOL)needOrNot
 {
+    
+    //Remove any prevouis videos at that path
+    [[NSFileManager defaultManager]  removeItemAtURL:outputUrl error:nil];
+    
     if (needOrNot){
         //create an avassetrack with our asset
         AVAssetTrack *clipVideoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
@@ -176,13 +180,11 @@
         //add the transformer layer instructions, then add to video composition
         instruction.layerInstructions = [NSArray arrayWithObject:transformer];
         videoComposition.instructions = [NSArray arrayWithObject: instruction];
-        
-        //Remove any prevouis videos at that path
-        [[NSFileManager defaultManager]  removeItemAtURL:outputUrl error:nil];
-        
+
         // assign all instruction for the video processing (in this case the transformation for cropping the video
         exporter.videoComposition = videoComposition;
     }
+    
     self.exportSession.timeRange = self.playerview.range;
 
     if (outputUrl){
