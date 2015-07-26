@@ -59,7 +59,6 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     NSURL *url = [info objectForKey:UIImagePickerControllerMediaURL];
     self.asset = [AVAsset assetWithURL:url];
-    
     // set properties for trimmer view
     [self.trimmerView setThemeColor:[UIColor lightGrayColor]];
     [self.trimmerView setAsset:self.asset];
@@ -74,10 +73,23 @@
     
     [self.playerview setVideoAsset:self.asset];
     [self.view insertSubview:self.playerview aboveSubview:self.trimmerView];
+    //delete other cache files to avoid the storage exploding
+    [self deleteOtherFiles:url];
 }
 
 
 #pragma mark - Actions
+
+- (void)deleteOtherFiles:(NSURL *) url{
+    NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
+    for (NSString *file in tmpDirectory) {
+        if ([file isEqualToString:@"tmpMov.mov"] || [[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] isEqualToString:[url absoluteString]]){
+            continue;
+        }
+        [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
+    }
+}
+
 
 - (void)deleteTempFile
 {
