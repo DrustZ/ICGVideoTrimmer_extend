@@ -1,9 +1,17 @@
 ##A extend edition of [ICGVideoTrimmer](https://github.com/itsmeichigo/ICGVideoTrimmer "ICGVideoTrimmer")
 ###What's new?
 * Add VideoPlayerView so that you can see the edit at real time!
-* More comfortable with orientations! The crop mode is just like `Instagram`'s, you can pick a region of a landscape video.
+* More comfortable with orientations! The crop mode is just like `Instagram`'s slide mode, you can pick a region of a landscape video.
 * Smooth with time edit and select
 
+some screen shots:
+<h3>A landscape video may like this:
+<img src="http://f8.topitme.com/8/79/40/1137883465fbb40798o.jpg" width="640" height="360" />
+<h3>After being imported, you can select a vertical region like (Just slide!):
+<img src="http://fe.topitme.com/e/d8/14/11378834485b214d8eo.jpg" width="360" height="640" />
+<img align="right" src="http://ff.topitme.com/f/65/3e/11378834575b63e65fo.jpg" width="360" height="640" />
+
+---
 --- 
 # ICGVideoTrimmer
 A library for quick video trimming based on `SAVideoRangeSlider`, mimicking the behavior of Instagram's.
