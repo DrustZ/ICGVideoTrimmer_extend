@@ -27,12 +27,7 @@ I've made this very quickly so here's a list of things to do for improvements (p
 
 ## Getting started
 
-#### Using CocoaPods:
-  Just add the following line in to your pod file:
-  
-	pod 'ICGVideoTrimmer'
-
-#### Manually add ICGVideoTrimmer as a library:
+### Manually add ICGVideoTrimmer as a library:
   Drag and drop the subfolder named `Source` in your project and you are done.
 
 ### Usage
