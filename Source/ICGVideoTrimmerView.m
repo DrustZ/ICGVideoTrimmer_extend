@@ -2,9 +2,10 @@
 //  ICGVideoTrimmerView.m
 //  ICGVideoTrimmer
 //
-//  Created by Huong Do on 1/18/15.
-//  Copyright (c) 2015 ichigo. All rights reserved.
+//  Created by 张明瑞 on 7/15/15.
+//  Copyright (c) 2015 . All rights reserved.
 //
+
 
 #import "ICGVideoTrimmerView.h"
 #import "ICGThumbView.h"
@@ -66,7 +67,7 @@
 
 
 #pragma mark - Private methods
-
+//左右边框长度
 - (CGFloat)thumbWidth
 {
     return _thumbWidth ?: 10;
@@ -206,8 +207,7 @@
         {
             CGPoint point = [gesture locationInView:self];
             
-            int deltaX = point.x - self.leftStartPoint.x;
-            
+            CGFloat deltaX = point.x - self.leftStartPoint.x;
             CGPoint center = self.leftOverlayView.center;
             
             CGFloat newLeftViewMidX = center.x += deltaX;;
@@ -218,7 +218,7 @@
             } else if (newLeftViewMinX + self.overlayWidth > maxWidth) {
                 newLeftViewMidX = maxWidth - self.overlayWidth / 2;
             }
-            
+           [gesture setTranslation:CGPointZero inView:self];
             self.leftOverlayView.center = CGPointMake(newLeftViewMidX, self.leftOverlayView.center.y);
             self.leftStartPoint = point;
             [self updateBorderFrames];
@@ -289,8 +289,10 @@
 
 - (void)notifyDelegate
 {
+   
     self.startTime = CGRectGetMaxX(self.leftOverlayView.frame) / self.widthPerSecond + (self.scrollView.contentOffset.x -self.thumbWidth) / self.widthPerSecond;
     self.endTime = CGRectGetMinX(self.rightOverlayView.frame) / self.widthPerSecond + (self.scrollView.contentOffset.x - self.thumbWidth) / self.widthPerSecond;
+//     NSLog(@"%f %f, %f",  CGRectGetMaxX(self.leftOverlayView.frame), self.startTime, self.widthPerSecond);
     [self.delegate trimmerView:self didChangeLeftPosition:self.startTime rightPosition:self.endTime];
 }
 

@@ -12,6 +12,9 @@
 		2CE63A101A74C43500B804F2 /* ICGVideoTrimmerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE63A0D1A74C43500B804F2 /* ICGVideoTrimmerView.m */; };
 		2CEFE5D41A6BA4A300592ABF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEFE5D31A6BA4A300592ABF /* AVFoundation.framework */; };
 		2CEFE5D61A6C164B00592ABF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEFE5D51A6C164B00592ABF /* MobileCoreServices.framework */; };
+		DCD84D511B6398C90056E38E /* ICGVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD84D501B6398C90056E38E /* ICGVideoPlayerView.m */; };
+		DCD84D541B63A6FB0056E38E /* AVAsset+VideoOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD84D531B63A6FB0056E38E /* AVAsset+VideoOrientation.m */; };
+		DCD84D571B63AA580056E38E /* ViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD84D561B63AA580056E38E /* ViewUtils.m */; };
 		DE4F1F581A67C9BB00478F77 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4F1F571A67C9BB00478F77 /* main.m */; };
 		DE4F1F5B1A67C9BB00478F77 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4F1F5A1A67C9BB00478F77 /* AppDelegate.m */; };
 		DE4F1F5E1A67C9BB00478F77 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4F1F5D1A67C9BB00478F77 /* ViewController.m */; };
@@ -41,6 +44,12 @@
 		2CE63A0D1A74C43500B804F2 /* ICGVideoTrimmerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICGVideoTrimmerView.m; sourceTree = "<group>"; };
 		2CEFE5D31A6BA4A300592ABF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2CEFE5D51A6C164B00592ABF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		DCD84D4F1B6398C90056E38E /* ICGVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICGVideoPlayerView.h; sourceTree = "<group>"; };
+		DCD84D501B6398C90056E38E /* ICGVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICGVideoPlayerView.m; sourceTree = "<group>"; };
+		DCD84D521B63A6FB0056E38E /* AVAsset+VideoOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVAsset+VideoOrientation.h"; sourceTree = "<group>"; };
+		DCD84D531B63A6FB0056E38E /* AVAsset+VideoOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVAsset+VideoOrientation.m"; sourceTree = "<group>"; };
+		DCD84D551B63AA580056E38E /* ViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtils.h; sourceTree = "<group>"; };
+		DCD84D561B63AA580056E38E /* ViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewUtils.m; sourceTree = "<group>"; };
 		DE4F1F521A67C9BB00478F77 /* ICGVideoTrimmer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ICGVideoTrimmer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE4F1F561A67C9BB00478F77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE4F1F571A67C9BB00478F77 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -85,7 +94,13 @@
 				2CE63A0B1A74C43500B804F2 /* ICGThumbView.m */,
 				2CE63A0C1A74C43500B804F2 /* ICGVideoTrimmerView.h */,
 				2CE63A0D1A74C43500B804F2 /* ICGVideoTrimmerView.m */,
+				DCD84D4F1B6398C90056E38E /* ICGVideoPlayerView.h */,
+				DCD84D501B6398C90056E38E /* ICGVideoPlayerView.m */,
 				2C513A6B1A7A169500CB2F9E /* ICGVideoTrimmer.h */,
+				DCD84D521B63A6FB0056E38E /* AVAsset+VideoOrientation.h */,
+				DCD84D531B63A6FB0056E38E /* AVAsset+VideoOrientation.m */,
+				DCD84D551B63AA580056E38E /* ViewUtils.h */,
+				DCD84D561B63AA580056E38E /* ViewUtils.m */,
 			);
 			path = Source;
 			sourceTree = SOURCE_ROOT;
@@ -254,9 +269,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCD84D571B63AA580056E38E /* ViewUtils.m in Sources */,
 				2CE63A0F1A74C43500B804F2 /* ICGThumbView.m in Sources */,
 				DE4F1F5E1A67C9BB00478F77 /* ViewController.m in Sources */,
+				DCD84D541B63A6FB0056E38E /* AVAsset+VideoOrientation.m in Sources */,
 				2CE63A0E1A74C43500B804F2 /* ICGRulerView.m in Sources */,
+				DCD84D511B6398C90056E38E /* ICGVideoPlayerView.m in Sources */,
 				DE4F1F5B1A67C9BB00478F77 /* AppDelegate.m in Sources */,
 				DE4F1F581A67C9BB00478F77 /* main.m in Sources */,
 				2CE63A101A74C43500B804F2 /* ICGVideoTrimmerView.m in Sources */,
