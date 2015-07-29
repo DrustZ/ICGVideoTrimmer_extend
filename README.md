@@ -62,7 +62,3 @@ for ICGVideoTrimmer.
 ## Contributing
 
 Contributions for bug fixing or improvements are welcome. Feel free to submit a pull request.
-
-## Licence
-
-ICGVideoTrimmer is available under the MIT license. See the LICENSE file for more info.
