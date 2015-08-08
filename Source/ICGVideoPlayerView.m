@@ -25,11 +25,11 @@
 @synthesize timer;
 
 - (void)play{
-    [self.player play];
+    [self.playerLayer.player play];
 }
 
 - (void)pause{
-    [self.player pause];
+    [self.playerLayer.player pause];
 }
 
 - (void)refreshTimePeriod:(CGFloat)startTime end:(CGFloat)endTime{
