@@ -11,6 +11,34 @@ some screen shots:
 <img src="http://fe.topitme.com/e/d8/14/11378834485b214d8eo.jpg" width="240" height="430" />
 <img align="right" src="http://ff.topitme.com/f/65/3e/11378834575b63e65fo.jpg" width="240" height="430" />
 
+use the playerView:
+```objective-C
+   //with  ICGVideoTrimmerView *trimmerView
+   //and ICGVideoPlayerView *playerview property
+   self.playerview = [[ICGVideoPlayerView alloc] init];
+   [self.playerview setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width,      self.view.frame.size.height-self.trimmerView.frame.size.height)];
+   
+   //after get the video
+   [self.playerview setVideoAsset:self.asset];
+   [self.view insertSubview:self.playerview aboveSubview:self.trimmerView];
+   
+   //to refresh the play period:
+   - (void)trimmerView:(ICGVideoTrimmerView *)trimmerView didChangeLeftPosition:(CGFloat)startTime rightPosition:(CGFloat)endTime{
+       //blahblahblah...
+       [self.playerview refreshTimePeriod:startTime end:endTime];
+   }
+  
+  //and in the trim method:
+  if (self.playerview.xrate != -1){//indicate that the video is landscape mode, need to be cropped
+        [self applyCropToVideoWithAsset:self.asset AtRect:CGRectMake(naturalSize.width * self.playerview.xrate, 0,self.view.frame.size.width, self.view.frame.size.height) OnTimeRange:self.playerview.range ExportToUrl:[NSURL fileURLWithPath:self.tempVideoPath] ExistingExportSession:self.exportSession WithCompletion:nil needCrop:YES];
+    } else {
+        [self applyCropToVideoWithAsset:self.asset AtRect:CGRectNull OnTimeRange:self.playerview.range ExportToUrl:[NSURL fileURLWithPath:self.tempVideoPath] ExistingExportSession:self.exportSession WithCompletion:nil needCrop:NO];
+    }
+    
+  //in the crop method:
+  self.exportSession.timeRange = self.playerview.range;
+```
+#To be more clear, you can see the demo project and use the ``ICGVideoPlayerView`` as it.
 ---
 --- 
 # ICGVideoTrimmer
