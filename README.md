@@ -38,7 +38,7 @@ use the playerView:
   //in the crop method:
   self.exportSession.timeRange = self.playerview.range;
 ```
-#To be more clear, you can see the demo project and use the ``ICGVideoPlayerView`` as it.
+####To be more clear, you can see the demo project and use the ``ICGVideoPlayerView`` as it.
 ---
 --- 
 # ICGVideoTrimmer
