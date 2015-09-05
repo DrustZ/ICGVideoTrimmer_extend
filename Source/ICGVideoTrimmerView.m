@@ -321,7 +321,9 @@
     // First image
     NSError *error;
     CMTime actualTime;
-    CGImageRef halfWayImage = [self.imageGenerator copyCGImageAtTime:kCMTimeZero actualTime:&actualTime error:&error];
+    AVAssetTrack *videoAsset1Track = [[self.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    CMTime time = videoAsset1Track.timeRange.duration;
+    CGImageRef halfWayImage = [self.imageGenerator copyCGImageAtTime:time actualTime:&actualTime error:&error];
     UIImage *videoScreen;
     if ([self isRetina]){
         videoScreen = [[UIImage alloc] initWithCGImage:halfWayImage scale:2.0 orientation:UIImageOrientationUp];
@@ -336,6 +338,9 @@
         [self.frameView addSubview:tmp];
         picWidth = tmp.frame.size.width;
         CGImageRelease(halfWayImage);
+    } else {
+        picWidth = 480;
+        NSLog(@"oh no!");
     }
     
     Float64 duration = CMTimeGetSeconds([self.asset duration]);
