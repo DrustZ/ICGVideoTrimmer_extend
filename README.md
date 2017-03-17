@@ -8,14 +8,16 @@
 some screen shots:
 <h3>A landscape video may like this:
 <br/>
-<img align="center" src="http://f8.topitme.com/8/79/40/1137883465fbb40798o.jpg" width="430" height="240" />
+<img align="center" src="http://f8.topitme.com/8/79/40/1137883465fbb40798o.jpg" width="300" height="180" />
 
 <h3>After being imported, you can select a vertical region like (Just slide!):</h3>
+left | right
+------------ | -------------
+<img src="http://fe.topitme.com/e/d8/14/11378834485b214d8eo.jpg" width="180" height="300" /> | <img src="http://ff.topitme.com/f/65/3e/11378834575b63e65fo.jpg" width="180" height="300" />
 
-<img src="http://fe.topitme.com/e/d8/14/11378834485b214d8eo.jpg" width="240" height="430" />
-<img align="right" src="http://ff.topitme.com/f/65/3e/11378834575b63e65fo.jpg" width="240" height="430" />
+
 <br/>
-
+________________________
 
 #### use the playerView:
 ```objective-C
